@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Nourish Greens - Premium Daily Superfoods</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#60471A",
+                        "brand-green": "#648D6C",
+                        "bg-cream": "#FFFDF9",
+                        "surface": "#F4EFE6",
+                        "accent-green": "#648D6C"
+                    },
+                    fontFamily: {
+                        "sans": ["Manrope", "sans-serif"],
+                        "serif": ["Newsreader", "serif"]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .flavor-active { border-color: #648D6C !important; background-color: #f4faeb !important; outline: 2px solid #648D6C; }
+        #main-product-image { transition: opacity 0.3s ease-in-out; }
+        .purchase-card-active { border-color: #648D6C !important; background-color: #F4FAEB !important; }
+        .supply-card-active { border-color: #648D6C !important; background-color: #F4FAEB !important; }
+    </style>
+</head>
+<body class="bg-bg-cream antialiased font-sans text-stone-900">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-bg-cream/80 backdrop-blur-md border-b border-stone-100">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a class="text-2xl font-extrabold tracking-tighter flex items-center gap-1" href="#">
+                nourish <span class="material-symbols-outlined text-green-700 text-lg">energy_savings_leaf</span>
+            </a>
+            <div class="hidden md:flex gap-8 text-sm font-semibold text-stone-600 uppercase tracking-widest">
+                <a href="#" class="hover:text-green-700 transition-colors">Shop All</a>
+                <a href="#" class="hover:text-green-700 transition-colors">Bundles</a>
+                <a href="#" class="hover:text-green-700 transition-colors">Science</a>
+                <a href="#" class="hover:text-green-700 transition-colors">About Us</a>
+            </div>
+            <div class="flex items-center gap-6">
+                <a href="#" class="text-sm font-bold">Login</a>
+                <button class="relative group flex items-center gap-2">
+                    <span class="text-sm font-bold">Shopping Bag</span>
+                    <span id="cart-count" class="bg-green-700 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 grid grid-cols-1 lg:grid-cols-12 gap-12">
+        
+        <!-- Left: Gallery -->
+        <div class="lg:col-span-7 flex gap-6">
+            <div class="hidden md:flex flex-col gap-4 w-20">
+                <img src="https://lh3.googleusercontent.com/aida/ADBb0uiU2mVqQSGAj85nNz4NWOMDx6sq6zhpzzbOopiWHkemX-jXwMv9Ok7D2ix2g5PhJlhtPqpiLBWIDaFnt-jmkkXwQgMRlipbFcTjepWf_WgQTOFck9xqIo2_Rm3cV5mMy2Gtrkp4zgl7D9ZK1-jpGBLVX9g6lQhydsMO9tyT6-syphCHTQha70iXYD5fLcMGQkp5NLg0Jyq-sxpwbnsGraJxt-xs4RL8GlFpgWzbLJoKXd9opNqMYyUZfg" class="thumb rounded-xl cursor-pointer border-2 border-stone-200" onclick="updateMainImg(this.src)">
+                <img src="https://lh3.googleusercontent.com/aida/ADBb0uhA8VFMX47pwCU0E3rSmKXhvz1kvSh0DOYquWykNE4tgjeLZMHKelMZgUMh-Fbf2ozI8gdJOXqgumGXRs4xx__rzoUegs_cCfZXnJniw4rw1hSA08ncwfEn8aR-5AvhJWG5YKswIS2ZfrMcyMG9S8SzbwmWbBu59hJeucyGfvPPY5FzBd4wxd7trAMfU92So3L9_AKYkWn4QLhivt-eMvJX1TjwfCD1afxAfV5rT76J0PcsL5_tx0T3EGQ" class="thumb rounded-xl cursor-pointer opacity-60" onclick="updateMainImg(this.src)">
+                <img src="https://lh3.googleusercontent.com/aida/ADBb0uh2FqIA4m01opoH7VFjpXDHy7KY5Iy7HuBDzeKKmTLad7O1BFTUZDY_k-r9GgS24kTn564kHgo1SfI_xn5qb2R5jT4AxGFBEcHZHjYaGL8okEOMcYH1VVdg3XW34cFTupSBinJ2dlrzEuln6OERKxZCpCDNja_FT6KBpYOGxR3ORjg6-O1LHNGhSJR1xK5_L6VRJI8DWjzKNj6AMBfCeY4eoUtEjWw14XAqXJOJ5uu4tFWLXSkJqFjT9qs" class="thumb rounded-xl cursor-pointer opacity-60" onclick="updateMainImg(this.src)">
+            </div>
+            <div class="flex-grow bg-surface rounded-[2.5rem] p-8 flex items-center justify-center relative min-h-[500px]">
+                <img id="main-product-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBp_fUlXmq5OubjhnQtcOME0xXiuyik6kGyoStbfuDidK_isPliOFPhw_D1vEMhHbT2CFasfc9E9z8pVFs7IavLJxScnq_Y6JgUVLrocLu_8sYSyI3a6SZvbOuC232IkoIrE6OHBlYoX00ENCxyYX_-StciMbR1GMinEAe964mAb52cC4EP8rcKZsQpHZC_PlaTR24-VXJhhKbTcced5EhXxTHgSJznBmnGaMAKlolhXCMui1dU5MbtVxGdFtvOzMv4GzA9sl8QXRY" class="w-full h-full object-contain">
+            </div>
+        </div>
+
+        <!-- Right: Info -->
+        <div class="lg:col-span-5 flex flex-col gap-6">
+            <div class="space-y-3">
+                <span class="inline-flex items-center gap-1 bg-[#FDF6E9] text-[#8E6935] text-[10px] font-black px-3 py-1 rounded-full tracking-widest uppercase">
+                    <span class="material-symbols-outlined text-xs fill-1">star</span> BEST SELLER
+                </span>
+                <h1 class="text-6xl font-serif font-medium leading-tight text-stone-900">Nourish Greens</h1>
+                <div class="flex items-center gap-3 text-sm">
+                    <div class="flex text-yellow-500 tracking-tighter">
+                        <span class="material-symbols-outlined text-sm fill-1">star</span>
+                        <span class="material-symbols-outlined text-sm fill-1">star</span>
+                        <span class="material-symbols-outlined text-sm fill-1">star</span>
+                        <span class="material-symbols-outlined text-sm fill-1">star</span>
+                        <span class="material-symbols-outlined text-sm fill-1">star</span>
+                        <span class="text-black font-bold ml-1">4.9</span>
+                        <span class="text-stone-400 ml-1">(221 Reviews)</span>
+                    </div>
+                    <span class="text-stone-300">|</span>
+                    <span class="text-[#FF5A1F] font-bold flex items-center gap-1">
+                        <span class="material-symbols-outlined text-sm fill-1">local_fire_department</span> 500+ sold this week
+                    </span>
+                </div>
+                <p class="text-stone-500 leading-relaxed text-lg">A refreshing daily greens blend that combines nutrient-dense greens, plant extracts, and functional ingredients into one simple scoop.</p>
+            </div>
+
+            <!-- Flavor Selection -->
+            <div class="space-y-3">
+                <h3 class="text-[10px] font-black tracking-[0.2em] text-stone-400 uppercase">Choose Your Flavor:</h3>
+                <div class="grid grid-cols-3 gap-3">
+                    <button onclick="setFlavor('Pineapple', this)" class="flavor-btn flavor-active flex items-center gap-2 p-3 border border-stone-200 rounded-xl transition-all">
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZCJKg2mYLM72b2s_993f60GiMNz1J_o2CO1yb4TQch3yvTbDYyt_6Xskckey-mgOhsvqWVToZhHAq7AViJdcNYK3DSi10bMh-Wo0zGjyWskUCNV21KifMDEbgRyNAKdmsjLAqMlw01mIjwpWbYiE9HZNo3aGf9DZpcMQKnyQfb82wHyUg7UBV9erm3joA5t8izipZuWplxogEIuVgQVjwX9aYxMQQ9XyU5JrYqM_0y7Tzhm_bnGUxVDPDfZJEo5VsUDK8gAxUVmk" class="w-8 h-8 rounded-full object-cover">
+                        <span class="text-sm font-bold">Pineapple</span>
+                    </button>
+                    <button onclick="setFlavor('Strawberry', this)" class="flavor-btn flex items-center gap-2 p-3 border border-stone-200 rounded-xl transition-all hover:border-stone-400">
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAi2TYzfDH0re6srCrgOqErwQGJzNbxfXQezcQqpH4IZWoA6kXzN7WcN5t61UXaDAwmod5c3C6zd17-eSPOePMUueZKmPsUyqMbjwdb6Sl2h32-u6HvyiaGPTIhFqvpQDHPlWEwDx0e0I6NiVtDvvUzlnDwVukfuU6oFQ2BTE6-9iLcwomfBoXrOjk9O_24AyBUA2j-zNDCFDz_o9bH2yBVDJi9PKUMmRmj2w67E8atsEbes0ibQtja9OojqY4atMVA7ymTeTIEk-M" class="w-8 h-8 rounded-full object-cover">
+                        <span class="text-sm font-bold">Strawberry</span>
+                    </button>
+                    <button onclick="setFlavor('Kiwi', this)" class="flavor-btn flex items-center gap-2 p-3 border border-stone-200 rounded-xl transition-all hover:border-stone-400">
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQ6q6PCMnUz6h4hDiJ2UDJx05LQHrwb2CimC-l2Sc3RweeQlMSmAJU3cxttAOwJZWw5Dd3BcyvRop5ncGSPq0vtunxu7HTjNpXwif8hMItfMDmW9LAmb6-DHPMukSS1kTxXCUPPFGiRsdmFybnzLowgMe-s0H_MtiU4oDhfi-ESxFboitvcAYCY9ngCbLzzFyAQuITUkm1W-cXPwW8z6KUY95nWh07Q6ATTk3OtuyKPxj6Wu9KZali7qxVvKZdAK_i1QMX_-FsyG4" class="w-8 h-8 rounded-full object-cover">
+                        <span class="text-sm font-bold">Kiwi</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Enhanced Purchase Options -->
+            <div class="bg-[#FBF8F3] border border-stone-100 rounded-[2rem] p-6 space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- Subscribe Card -->
+                    <div id="card-sub" onclick="setPurchaseType('sub')" class="purchase-card-active cursor-pointer relative bg-white border border-stone-200 rounded-2xl p-5 transition-all">
+                        <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#648D6C] text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest whitespace-nowrap">Most Popular</div>
+                        <span class="text-[10px] font-black text-stone-400 uppercase tracking-widest">Subscribe</span>
+                        <div class="flex items-baseline gap-1 mt-1">
+                            <span class="text-3xl font-black">$19.49</span>
+                        </div>
+                        <p class="text-[10px] text-stone-400 mt-1">/month • no commitment</p>
+                    </div>
+
+                    <!-- One-Time Card -->
+                    <div id="card-once" onclick="setPurchaseType('once')" class="cursor-pointer bg-white border border-stone-200 rounded-2xl p-5 transition-all hover:border-stone-400">
+                        <span class="text-[10px] font-black text-stone-400 uppercase tracking-widest">One-time purchase</span>
+                        <div class="flex items-baseline gap-1 mt-1">
+                            <span id="once-price-display" class="text-3xl font-black">$29.99</span>
+                        </div>
+                        <p id="once-supply-display" class="text-[10px] text-stone-400 mt-1">1 month supply</p>
+                    </div>
+                </div>
+
+                <!-- One-time specific options (Grid like image) -->
+                <div id="once-options-grid" class="grid grid-cols-3 gap-3 pt-2">
+                    <button onclick="updateOnceOption(29.99, '1 month supply', this)" class="supply-btn bg-white border border-stone-200 rounded-2xl p-4 flex flex-col items-center gap-1 transition-all">
+                        <span class="text-[10px] font-bold text-stone-600">1-month supply</span>
+                        <span class="text-lg font-black">$29.99</span>
+                    </button>
+                    <button onclick="updateOnceOption(51.99, '2 month supply', this)" class="supply-btn supply-card-active border border-[#648D6C] bg-white rounded-2xl p-4 flex flex-col items-center gap-1 transition-all relative">
+                        <span class="text-[10px] font-bold text-stone-600">2-month supply</span>
+                        <span class="text-lg font-black">$51.99</span>
+                        <span class="mt-1 bg-[#F4FAEB] text-[#648D6C] text-[8px] font-black px-2 py-0.5 rounded-full uppercase">Save 10%</span>
+                    </button>
+                    <button onclick="updateOnceOption(69.99, '3 month supply', this)" class="supply-btn bg-white border border-stone-200 rounded-2xl p-4 flex flex-col items-center gap-1 transition-all">
+                        <span class="text-[10px] font-bold text-stone-600">3-month supply</span>
+                        <span class="text-lg font-black">$69.99</span>
+                        <span class="mt-1 bg-[#F4FAEB] text-[#648D6C] text-[8px] font-black px-2 py-0.5 rounded-full uppercase">Save 20%</span>
+                    </button>
+                </div>
+
+                <!-- Features list -->
+                <div class="space-y-3 pt-4 border-t border-stone-100">
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-accent-green text-xl fill-1">check_circle</span>
+                        <p class="text-sm font-medium">Save 15% every month + free shipping</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-accent-green text-xl fill-1">check_circle</span>
+                        <p class="text-sm font-medium">Cancel anytime - no fees</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-accent-green text-xl fill-1">check_circle</span>
+                        <p class="text-sm font-medium">Priority dispatch - never run out</p>
+                    </div>
+                </div>
+
+                <button onclick="addToCart()" class="w-full bg-primary text-white py-5 rounded-2xl font-bold text-lg flex items-center justify-center gap-3 hover:opacity-90 active:scale-[0.98] transition-all">
+                    <span class="material-symbols-outlined">shopping_cart</span>
+                    Add to cart - Start my journey
+                </button>
+            </div>
+
+            <!-- Trust Icons -->
+            <div class="grid grid-cols-3 gap-4 pt-4">
+                <div class="flex flex-col items-center text-center gap-2">
+                    <div class="w-12 h-12 bg-[#FCF6E9] rounded-full flex items-center justify-center text-[#B88645]">
+                        <span class="material-symbols-outlined">energy_savings_leaf</span>
+                    </div>
+                    <span class="text-[11px] font-black uppercase tracking-widest">100% vegan</span>
+                    <span class="text-[10px] text-stone-400">No fillers or binders</span>
+                </div>
+                <div class="flex flex-col items-center text-center gap-2">
+                    <div class="w-12 h-12 bg-[#FCF6E9] rounded-full flex items-center justify-center text-[#B88645]">
+                        <span class="material-symbols-outlined">payments</span>
+                    </div>
+                    <span class="text-[11px] font-black uppercase tracking-widest">60-day guarantee</span>
+                    <span class="text-[10px] text-stone-400">Love it or full refund</span>
+                </div>
+                <div class="flex flex-col items-center text-center gap-2">
+                    <div class="w-12 h-12 bg-[#FCF6E9] rounded-full flex items-center justify-center text-[#B88645]">
+                        <span class="material-symbols-outlined">verified</span>
+                    </div>
+                    <span class="text-[11px] font-black uppercase tracking-widest">3rd-party tested</span>
+                    <span class="text-[10px] text-stone-400">for heavy metals</span>
+                </div>
+            </div>
+
+            <!-- Accordions -->
+            <div class="divide-y divide-stone-100 border-t border-stone-100">
+                <div class="py-4 flex justify-between items-center cursor-pointer group">
+                    <span class="font-bold">Serving Information</span>
+                    <span class="material-symbols-outlined group-hover:rotate-90 transition-transform">add</span>
+                </div>
+                <div class="py-4 flex justify-between items-center cursor-pointer group">
+                    <span class="font-bold">Ingredients</span>
+                    <span class="material-symbols-outlined group-hover:rotate-90 transition-transform">add</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let state = {
+            cart: 0,
+            purchaseType: 'sub',
+            oncePrice: 51.99,
+            onceLabel: '2 month supply'
+        };
+
+        function updateMainImg(src) {
+            const main = document.getElementById('main-product-image');
+            main.style.opacity = '0';
+            setTimeout(() => {
+                main.src = src;
+                main.style.opacity = '1';
+            }, 200);
+        }
+
+        function setFlavor(name, btn) {
+            document.querySelectorAll('.flavor-btn').forEach(b => b.classList.remove('flavor-active'));
+            btn.classList.add('flavor-active');
+        }
+
+        function setPurchaseType(type) {
+            state.purchaseType = type;
+            const subCard = document.getElementById('card-sub');
+            const onceCard = document.getElementById('card-once');
+            const onceGrid = document.getElementById('once-options-grid');
+
+            if (type === 'sub') {
+                subCard.classList.add('purchase-card-active', 'border-[#648D6C]');
+                onceCard.classList.remove('purchase-card-active', 'border-[#648D6C]');
+                onceGrid.style.opacity = '0.4';
+                onceGrid.style.pointerEvents = 'none';
+            } else {
+                onceCard.classList.add('purchase-card-active', 'border-[#648D6C]');
+                subCard.classList.remove('purchase-card-active', 'border-[#648D6C]');
+                onceGrid.style.opacity = '1';
+                onceGrid.style.pointerEvents = 'auto';
+            }
+        }
+
+        function updateOnceOption(price, label, btn) {
+            state.oncePrice = price;
+            state.onceLabel = label;
+            
+            document.getElementById('once-price-display').innerText = `$${price}`;
+            document.getElementById('once-supply-display').innerText = label;
+
+            document.querySelectorAll('.supply-btn').forEach(b => {
+                b.classList.remove('supply-card-active', 'border-[#648D6C]');
+                b.classList.add('border-stone-200');
+            });
+            btn.classList.add('supply-card-active', 'border-[#648D6C]');
+            btn.classList.remove('border-stone-200');
+            
+            // Auto select Once type if supply is clicked
+            if(state.purchaseType !== 'once') setPurchaseType('once');
+        }
+
+        function addToCart() {
+            state.cart++;
+            document.getElementById('cart-count').innerText = state.cart;
+        }
+
+        // Initialize grid state for One-time
+        window.onload = () => {
+            const grid = document.getElementById('once-options-grid');
+            grid.style.opacity = '0.4';
+            grid.style.pointerEvents = 'none';
+        };
+    </script>
+</body>
+</html>
