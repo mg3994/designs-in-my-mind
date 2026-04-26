@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Nourish Greens | Premium Superfood</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#60471A",
+                        "brand-green": "#648D6C",
+                        "brand-light-green": "#F4FAEB",
+                        "bg-cream": "#FFFDF9",
+                        "surface": "#F4EFE6",
+                    },
+                    fontFamily: {
+                        "sans": ["Manrope", "sans-serif"],
+                        "serif": ["Newsreader", "serif"]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .purchase-card-active { border-color: #648D6C !important; border-width: 2px !important; background-color: white !important; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); }
+        .supply-card-active { border-color: #648D6C !important; background-color: #F4FAEB !important; border-width: 2px !important; }
+        .flavor-active { border-color: #648D6C !important; background-color: #F4FAEB !important; outline: 1.5px solid #648D6C; }
+        
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+        .accordion-open .accordion-content { max-height: 800px; }
+        .accordion-open .icon-rotate { transform: rotate(45deg); }
+        
+        .subset-container { 
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            opacity: 0; 
+            max-height: 0; 
+            overflow: hidden;
+            pointer-events: none; 
+            visibility: hidden;
+        }
+        .subset-active { 
+            opacity: 1; 
+            max-height: 500px; 
+            pointer-events: auto; 
+            visibility: visible;
+            margin-top: 1.25rem; 
+        }
+
+        #cart-drawer { transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        #cart-drawer.open { transform: translateX(0); }
+        #drawer-overlay { opacity: 0; transition: opacity 0.4s ease; pointer-events: none; }
+        #drawer-overlay.open { opacity: 1; pointer-events: auto; }
+
+        .star-fill { font-variation-settings: 'FILL' 1; color: #FFB800; }
+        .fade-content { animation: fadeIn 0.4s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-bg-cream antialiased font-sans text-stone-900">
+
+    <div id="drawer-overlay" onclick="closeCart()" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60]"></div>
+    <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white z-[70] shadow-2xl flex flex-col">
+        <div class="p-6 border-b border-stone-100 flex justify-between items-center">
+            <h2 class="text-xl font-extrabold tracking-tight">Your Bag (<span id="cart-qty-header">0</span>)</h2>
+            <button onclick="closeCart()" class="p-2 hover:bg-stone-100 rounded-full"><span class="material-symbols-outlined">close</span></button>
+        </div>
+        <div id="cart-items" class="flex-grow overflow-y-auto p-6 space-y-6"></div>
+        <div id="cart-footer" class="p-6 border-t border-stone-100 bg-stone-50/50 space-y-4">
+            <div class="flex justify-between items-center font-bold text-lg"><span>Subtotal</span><span id="cart-total">$0.00</span></div>
+            <button class="w-full bg-primary text-white py-4 rounded-xl font-bold">Checkout</button>
+        </div>
+    </div>
+
+    <nav class="sticky top-0 z-50 bg-bg-cream/90 backdrop-blur-md border-b border-stone-100">
+        <div class="max-w-7xl mx-auto px-4 md:px-8 py-4 flex justify-between items-center">
+            <a class="text-xl md:text-2xl font-extrabold tracking-tighter flex items-center gap-1" href="#">
+                nourish <span class="material-symbols-outlined text-green-700 text-lg">energy_savings_leaf</span>
+            </a>
+            <button onclick="openCart()" class="bg-primary text-white px-5 py-2.5 rounded-full text-xs font-bold flex items-center gap-2 shadow-sm transition-all hover:scale-105 active:scale-95">
+                <span class="material-symbols-outlined text-lg">shopping_bag</span>
+                <span id="nav-cart-qty">0</span>
+            </button>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-12 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
+        <!-- Images -->
+        <div class="lg:col-span-7 flex flex-col-reverse md:flex-row gap-4 md:gap-6">
+            <div id="thumbnails-container" class="flex md:flex-col gap-3 md:w-20 overflow-x-auto md:overflow-visible pb-2 md:pb-0"></div>
+            <div class="flex-grow bg-surface rounded-[2.5rem] p-6 md:p-12 flex items-center justify-center min-h-[350px] md:min-h-[600px]">
+                <img id="main-product-image" src="" class="w-full h-full object-contain transition-opacity duration-300">
+            </div>
+        </div>
+
+        <!-- Details -->
+        <div class="lg:col-span-5 flex flex-col gap-8">
+            <div class="space-y-4 fade-content" id="product-info-block">
+                <h1 id="product-title" class="text-4xl md:text-6xl font-serif font-medium text-stone-900 leading-tight">Nourish Greens</h1>
+                <div class="flex items-center gap-3">
+                    <div class="flex text-[#FFB800]"><span class="material-symbols-outlined star-fill">star</span><span class="material-symbols-outlined star-fill">star</span><span class="material-symbols-outlined star-fill">star</span><span class="material-symbols-outlined star-fill">star</span><span class="material-symbols-outlined star-fill">star</span></div>
+                    <span id="rating-number" class="font-bold text-lg">4.8</span>
+                    <span id="review-count" class="text-stone-400 text-sm">(221 Reviews)</span>
+                </div>
+                <p id="product-description" class="text-stone-500 text-lg leading-relaxed">Your daily ritual for comprehensive gut health and natural energy.</p>
+            </div>
+
+            <!-- Flavor Picker -->
+            <div class="space-y-4">
+                <h3 class="text-[10px] font-black tracking-widest text-stone-400 uppercase">Select Flavor</h3>
+                <div class="grid grid-cols-3 gap-3">
+                    <button id="flavor-btn-Pineapple" onclick="changeFlavor('Pineapple')" class="flavor-btn flavor-active border border-stone-200 rounded-2xl p-4 flex flex-col items-center gap-3 transition-all hover:border-brand-green">
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZCJKg2mYLM72b2s_993f60GiMNz1J_o2CO1yb4TQch3yvTbDYyt_6Xskckey-mgOhsvqWVToZhHAq7AViJdcNYK3DSi10bMh-Wo0zGjyWskUCNV21KifMDEbgRyNAKdmsjLAqMlw01mIjwpWbYiE9HZNo3aGf9DZpcMQKnyQfb82wHyUg7UBV9erm3joA5t8izipZuWplxogEIuVgQVjwX9aYxMQQ9XyU5JrYqM_0y7Tzhm_bnGUxVDPDfZJEo5VsUDK8gAxUVmk" class="w-12 h-12 rounded-full object-cover">
+                        <span class="text-xs font-bold">Pineapple</span>
+                    </button>
+                    <button id="flavor-btn-Strawberry" onclick="changeFlavor('Strawberry')" class="flavor-btn border border-stone-200 rounded-2xl p-4 flex flex-col items-center gap-3 transition-all hover:border-brand-green">
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAi2TYzfDH0re6srCrgOqErwQGJzNbxfXQezcQqpH4IZWoA6kXzN7WcN5t61UXaDAwmod5c3C6zd17-eSPOePMUueZKmPsUyqMbjwdb6Sl2h32-u6HvyiaGPTIhFqvpQDHPlWEwDx0e0I6NiVtDvvUzlnDwVukfuU6oFQ2BTE6-9iLcwomfBoXrOjk9O_24AyBUA2j-zNDCFDz_o9bH2yBVDJi9PKUMmRmj2w67E8atsEbes0ibQtja9OojqY4atMVA7ymTeTIEk-M" class="w-12 h-12 rounded-full object-cover">
+                        <span class="text-xs font-bold">Strawberry</span>
+                    </button>
+                    <button id="flavor-btn-Kiwi" onclick="changeFlavor('Kiwi')" class="flavor-btn border border-stone-200 rounded-2xl p-4 flex flex-col items-center gap-3 transition-all hover:border-brand-green">
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQ6q6PCMnUz6h4hDiJ2UDJx05LQHrwb2CimC-l2Sc3RweeQlMSmAJU3cxttAOwJZWw5Dd3BcyvRop5ncGSPq0vtunxu7HTjNpXwif8hMItfMDmW9LAmb6-DHPMukSS1kTxXCUPPFGiRsdmFybnzLowgMe-s0H_MtiU4oDhfi-ESxFboitvcAYCY9ngCbLzzFyAQuITUkm1W-cXPwW8z6KUY95nWh07Q6ATTk3OtuyKPxj6Wu9KZali7qxVvKZdAK_i1QMX_-FsyG4" class="w-12 h-12 rounded-full object-cover">
+                        <span class="text-xs font-bold">Kiwi</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Pricing Section -->
+            <div class="bg-white border border-stone-100 rounded-[2.5rem] p-6 shadow-sm space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- Subscription Choice -->
+                    <div id="card-sub" onclick="setPurchaseType('sub')" class="purchase-card-active relative bg-stone-50 border border-stone-200 rounded-3xl p-6 cursor-pointer transition-all hover:shadow-md group">
+                        <div class="absolute -top-3 left-6 bg-brand-green text-white text-[9px] font-black uppercase px-3 py-1.5 rounded-full shadow-sm z-10">Most Popular</div>
+                        <span class="text-[10px] font-black text-brand-green uppercase tracking-widest">Subscription</span>
+                        <div id="sub-price-display" class="text-4xl font-black mt-2 text-stone-900">$19.49</div>
+                        <p class="text-[10px] font-bold text-stone-400 mt-2">SAVE 35% + FREE SHIPPING</p>
+                    </div>
+
+                    <!-- One-Time Choice -->
+                    <div id="card-once" onclick="setPurchaseType('once')" class="relative bg-stone-50 border border-stone-200 rounded-3xl p-6 cursor-pointer transition-all hover:shadow-md group">
+                        <span class="text-[10px] font-black text-stone-400 uppercase tracking-widest">One-time</span>
+                        <div id="once-price-display" class="text-4xl font-black mt-2 text-stone-900">$51.99</div>
+                        <p id="once-supply-display" class="text-[10px] font-bold text-stone-400 mt-2 uppercase">2 MONTH SUPPLY</p>
+                    </div>
+                </div>
+
+                <!-- One-Time Subset Options (Conditional) -->
+                <div id="subset-ui" class="subset-container">
+                    <div class="grid grid-cols-3 gap-3 pt-2">
+                        <button onclick="updateOnceOption(29.99, '1 MONTH SUPPLY', this)" class="supply-btn bg-white border border-stone-200 rounded-2xl p-4 flex flex-col items-center gap-1 transition-all">
+                            <span class="text-[9px] font-bold text-stone-500 uppercase">1-mo</span>
+                            <span id="once-opt-1" class="text-base font-black">$29.99</span>
+                        </button>
+                        <button id="popular-onetime-btn" onclick="updateOnceOption(51.99, '2 MONTH SUPPLY', this)" class="supply-btn supply-card-active bg-white border-2 border-brand-green rounded-2xl p-4 flex flex-col items-center gap-1 transition-all relative">
+                            <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-green text-white text-[7px] font-black uppercase px-2.5 py-1 rounded-full whitespace-nowrap shadow-sm z-10">Most Popular</div>
+                            <span class="text-[9px] font-bold text-stone-500 uppercase">2-mo</span>
+                            <span id="once-opt-2" class="text-base font-black">$51.99</span>
+                            <span class="text-[8px] font-bold text-brand-green mt-0.5">SAVE 15%</span>
+                        </button>
+                        <button onclick="updateOnceOption(69.99, '3 MONTH SUPPLY', this)" class="supply-btn bg-white border border-stone-200 rounded-2xl p-4 flex flex-col items-center gap-1 transition-all">
+                            <span class="text-[9px] font-bold text-stone-500 uppercase">3-mo</span>
+                            <span id="once-opt-3" class="text-base font-black">$69.99</span>
+                            <span class="text-[8px] font-bold text-stone-800 mt-0.5">SAVE 25%</span>
+                        </button>
+                    </div>
+                </div>
+
+                <button onclick="addToCart()" class="w-full bg-primary text-white py-5 rounded-2xl font-bold text-lg hover:opacity-95 active:scale-95 transition-all shadow-xl shadow-primary/10">
+                    Add to Bag — <span id="btn-price-preview">$19.49</span>
+                </button>
+            </div>
+
+            <!-- Features -->
+            <div class="grid grid-cols-3 gap-4 py-6 border-y border-stone-100 text-center">
+                <div class="space-y-1"><span class="material-symbols-outlined text-brand-green text-3xl">eco</span><p class="text-[9px] font-black uppercase text-stone-500">Vegan</p></div>
+                <div class="space-y-1"><span class="material-symbols-outlined text-brand-green text-3xl">biotech</span><p class="text-[9px] font-black uppercase text-stone-500">Extracts</p></div>
+                <div class="space-y-1"><span class="material-symbols-outlined text-brand-green text-3xl">verified</span><p class="text-[9px] font-black uppercase text-stone-500">Tested</p></div>
+            </div>
+
+            <!-- Nutritional & Info Accordions -->
+            <div class="divide-y divide-stone-100">
+                <div class="accordion-item" onclick="toggleAccordion(this)">
+                    <div class="py-6 flex justify-between items-center cursor-pointer group">
+                        <span class="font-bold text-stone-900 group-hover:text-brand-green transition-colors">Ingredients & Nutrition</span>
+                        <span class="material-symbols-outlined icon-rotate transition-transform">add</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div id="dynamic-ingredients" class="pb-6 text-sm text-stone-500 leading-relaxed fade-content"></div>
+                        <div id="dynamic-nutrition" class="pb-6 grid grid-cols-2 gap-4 fade-content"></div>
+                    </div>
+                </div>
+                <div class="accordion-item" onclick="toggleAccordion(this)">
+                    <div class="py-6 flex justify-between items-center cursor-pointer group">
+                        <span class="font-bold text-stone-900 group-hover:text-brand-green transition-colors">Suggested Use</span>
+                        <span class="material-symbols-outlined icon-rotate transition-transform">add</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div id="dynamic-usage" class="pb-6 text-sm text-stone-500 leading-relaxed fade-content"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const flavorData = {
+            "Pineapple": {
+                title: "Nourish Greens: Pineapple Punch",
+                rating: 4.8,
+                reviews: 221,
+                desc: "An island-inspired digestive powerhouse that eliminates bloat using raw pineapple bromelain and enzymes.",
+                prices: { sub: 19.49, once: [29.99, 51.99, 69.99] },
+                mainImg: "https://lh3.googleusercontent.com/aida-public/AB6AXuBp_fUlXmq5OubjhnQtcOME0xXiuyik6kGyoStbfuDidK_isPliOFPhw_D1vEMhHbT2CFasfc9E9z8pVFs7IavLJxScnq_Y6JgUVLrocLu_8sYSyI3a6SZvbOuC232IkoIrE6OHBlYoX00ENCxyYX_-StciMbR1GMinEAe964mAb52cC4EP8rcKZsQpHZC_PlaTR24-VXJhhKbTcced5EhXxTHgSJznBmnGaMAKlolhXCMui1dU5MbtVxGdFtvOzMv4GzA9sl8QXRY",
+                thumbs: ["https://lh3.googleusercontent.com/aida-public/AB6AXuBp_fUlXmq5OubjhnQtcOME0xXiuyik6kGyoStbfuDidK_isPliOFPhw_D1vEMhHbT2CFasfc9E9z8pVFs7IavLJxScnq_Y6JgUVLrocLu_8sYSyI3a6SZvbOuC232IkoIrE6OHBlYoX00ENCxyYX_-StciMbR1GMinEAe964mAb52cC4EP8rcKZsQpHZC_PlaTR24-VXJhhKbTcced5EhXxTHgSJznBmnGaMAKlolhXCMui1dU5MbtVxGdFtvOzMv4GzA9sl8QXRY"],
+                ingredients: "Pure Pineapple Extract, Bromelain, Organic Spirulina, Chlorella, Wheatgrass, Reishi Mushroom, and Ashwagandha.",
+                nutrition: { cals: 45, carbs: "2g", sugar: "0g", probiotics: "8B CFU" },
+                usage: "Vigorously mix one scoop with 8oz of ice-cold water first thing in the morning."
+            },
+            "Strawberry": {
+                title: "Nourish Greens: Wild Strawberry",
+                rating: 4.9,
+                reviews: 184,
+                desc: "A nutrient-dense antioxidant blend designed to support glowing skin and daily metabolic vitality.",
+                prices: { sub: 21.49, once: [32.99, 54.99, 74.99] },
+                mainImg: "https://lh3.googleusercontent.com/aida-public/AB6AXuAi2TYzfDH0re6srCrgOqErwQGJzNbxfXQezcQqpH4IZWoA6kXzN7WcN5t61UXaDAwmod5c3C6zd17-eSPOePMUueZKmPsUyqMbjwdb6Sl2h32-u6HvyiaGPTIhFqvpQDHPlWEwDx0e0I6NiVtDvvUzlnDwVukfuU6oFQ2BTE6-9iLcwomfBoXrOjk9O_24AyBUA2j-zNDCFDz_o9bH2yBVDJi9PKUMmRmj2w67E8atsEbes0ibQtja9OojqY4atMVA7ymTeTIEk-M",
+                thumbs: ["https://lh3.googleusercontent.com/aida-public/AB6AXuAi2TYzfDH0re6srCrgOqErwQGJzNbxfXQezcQqpH4IZWoA6kXzN7WcN5t61UXaDAwmod5c3C6zd17-eSPOePMUueZKmPsUyqMbjwdb6Sl2h32-u6HvyiaGPTIhFqvpQDHPlWEwDx0e0I6NiVtDvvUzlnDwVukfuU6oFQ2BTE6-9iLcwomfBoXrOjk9O_24AyBUA2j-zNDCFDz_o9bH2yBVDJi9PKUMmRmj2w67E8atsEbes0ibQtja9OojqY4atMVA7ymTeTIEk-M"],
+                ingredients: "Freeze-dried Wild Strawberry, Beetroot Powder, Organic Barley Grass, Probiotics Complex, and Stevia Leaf.",
+                nutrition: { cals: 40, carbs: "3g", sugar: "0g", probiotics: "9B CFU" },
+                usage: "Add to a morning smoothie or shake with coconut water for a refreshing afternoon pick-me-up."
+            },
+            "Kiwi": {
+                title: "Nourish Greens: Golden Kiwi",
+                rating: 4.7,
+                reviews: 142,
+                desc: "A zesty immune-boosting formula featuring rare golden kiwi polyphenols and bioavailable vitamins.",
+                prices: { sub: 18.99, once: [27.99, 49.99, 64.99] },
+                mainImg: "https://lh3.googleusercontent.com/aida-public/AB6AXuBQ6q6PCMnUz6h4hDiJ2UDJx05LQHrwb2CimC-l2Sc3RweeQlMSmAJU3cxttAOwJZWw5Dd3BcyvRop5ncGSPq0vtunxu7HTjNpXwif8hMItfMDmW9LAmb6-DHPMukSS1kTxXCUPPFGiRsdmFybnzLowgMe-s0H_MtiU4oDhfi-ESxFboitvcAYCY9ngCbLzzFyAQuITUkm1W-cXPwW8z6KUY95nWh07Q6ATTk3OtuyKPxj6Wu9KZali7qxVvKZdAK_i1QMX_-FsyG4",
+                thumbs: ["https://lh3.googleusercontent.com/aida-public/AB6AXuBQ6q6PCMnUz6h4hDiJ2UDJx05LQHrwb2CimC-l2Sc3RweeQlMSmAJU3cxttAOwJZWw5Dd3BcyvRop5ncGSPq0vtunxu7HTjNpXwif8hMItfMDmW9LAmb6-DHPMukSS1kTxXCUPPFGiRsdmFybnzLowgMe-s0H_MtiU4oDhfi-ESxFboitvcAYCY9ngCbLzzFyAQuITUkm1W-cXPwW8z6KUY95nWh07Q6ATTk3OtuyKPxj6Wu9KZali7qxVvKZdAK_i1QMX_-FsyG4"],
+                ingredients: "Golden Kiwi Essence, Kale, Spinach, Matcha Tea, Prebiotic Fiber, Zinc, and Selenium.",
+                nutrition: { cals: 48, carbs: "2g", sugar: "0g", probiotics: "7.5B CFU" },
+                usage: "Stir into a glass of water with a slice of lime. Ideal for daily immune maintenance."
+            }
+        };
+
+        let cart = [];
+        let currentFlavor = "Pineapple";
+        let currentType = "sub"; 
+        let selectedOncePrice = 51.99;
+        let selectedOnceDesc = "2 MONTH SUPPLY";
+
+        function changeFlavor(name) {
+            currentFlavor = name;
+            document.querySelectorAll('.flavor-btn').forEach(b => b.classList.remove('flavor-active'));
+            document.getElementById(`flavor-btn-${name}`).classList.add('flavor-active');
+            
+            // Re-sync pricing from data
+            const data = flavorData[currentFlavor];
+            document.getElementById('sub-price-display').innerText = `$${data.prices.sub.toFixed(2)}`;
+            
+            // Update the One-Time Subset pricing
+            document.getElementById('once-opt-1').innerText = `$${data.prices.once[0].toFixed(2)}`;
+            document.getElementById('once-opt-2').innerText = `$${data.prices.once[1].toFixed(2)}`;
+            document.getElementById('once-opt-3').innerText = `$${data.prices.once[2].toFixed(2)}`;
+            
+            // If we are currently in one-time mode, reset to the popular 2-mo option for the new flavor
+            if(currentType === 'once') {
+                updateOnceOption(data.prices.once[1], '2 MONTH SUPPLY', document.getElementById('popular-onetime-btn'));
+            } else {
+                // Just sync the display
+                selectedOncePrice = data.prices.once[1]; 
+                document.getElementById('once-price-display').innerText = `$${selectedOncePrice.toFixed(2)}`;
+            }
+
+            syncUI();
+        }
+
+        function syncUI() {
+            const data = flavorData[currentFlavor];
+            
+            // Textual Content
+            document.getElementById('product-title').innerText = data.title;
+            document.getElementById('rating-number').innerText = data.rating;
+            document.getElementById('review-count').innerText = `(${data.reviews} Reviews)`;
+            document.getElementById('product-description').innerText = data.desc;
+            document.getElementById('dynamic-ingredients').innerText = data.ingredients;
+            document.getElementById('dynamic-usage').innerText = data.usage;
+
+            // Nutrition Facts
+            document.getElementById('dynamic-nutrition').innerHTML = `
+                <div class="bg-stone-50 p-4 rounded-xl">
+                    <p class="text-[9px] font-black uppercase text-stone-400">Calories</p>
+                    <p class="font-bold">${data.nutrition.cals}</p>
+                </div>
+                <div class="bg-stone-50 p-4 rounded-xl">
+                    <p class="text-[9px] font-black uppercase text-stone-400">Probiotics</p>
+                    <p class="font-bold">${data.nutrition.probiotics}</p>
+                </div>
+                <div class="bg-stone-50 p-4 rounded-xl">
+                    <p class="text-[9px] font-black uppercase text-stone-400">Total Sugar</p>
+                    <p class="font-bold">${data.nutrition.sugar}</p>
+                </div>
+                <div class="bg-stone-50 p-4 rounded-xl">
+                    <p class="text-[9px] font-black uppercase text-stone-400">Net Carbs</p>
+                    <p class="font-bold">${data.nutrition.carbs}</p>
+                </div>
+            `;
+
+            // Images
+            const main = document.getElementById('main-product-image');
+            main.style.opacity = '0';
+            setTimeout(() => { main.src = data.mainImg; main.style.opacity = '1'; }, 200);
+
+            document.getElementById('thumbnails-container').innerHTML = data.thumbs.map((src, i) => `
+                <div class="w-16 h-16 md:w-full aspect-square bg-surface rounded-2xl overflow-hidden border-2 ${i === 0 ? 'border-brand-green' : 'border-transparent opacity-60'} cursor-pointer" onclick="updateMainImg('${src}', this)">
+                    <img src="${src}" class="w-full h-full object-contain">
+                </div>
+            `).join('');
+
+            updateAddButton();
+        }
+
+        function setPurchaseType(type) {
+            currentType = type;
+            document.getElementById('card-sub').classList.toggle('purchase-card-active', type === 'sub');
+            document.getElementById('card-once').classList.toggle('purchase-card-active', type === 'once');
+            document.getElementById('subset-ui').classList.toggle('subset-active', type === 'once');
+            updateAddButton();
+        }
+
+        function updateOnceOption(price, label, btn) {
+            selectedOncePrice = price;
+            selectedOnceDesc = label;
+            document.getElementById('once-price-display').innerText = `$${price.toFixed(2)}`;
+            document.getElementById('once-supply-display').innerText = label;
+            
+            document.querySelectorAll('.supply-btn').forEach(b => {
+                b.classList.remove('supply-card-active', 'border-2', 'border-brand-green');
+                b.classList.add('border-stone-200');
+            });
+            btn.classList.add('supply-card-active', 'border-2', 'border-brand-green');
+            btn.classList.remove('border-stone-200');
+            
+            setPurchaseType('once');
+        }
+
+        function updateAddButton() {
+            const price = currentType === 'sub' ? flavorData[currentFlavor].prices.sub : selectedOncePrice;
+            document.getElementById('btn-price-preview').innerText = `$${price.toFixed(2)}`;
+        }
+
+        function updateMainImg(src, thumb) {
+            document.getElementById('main-product-image').src = src;
+            document.querySelectorAll('#thumbnails-container > div').forEach(d => d.classList.remove('border-brand-green'));
+            thumb.classList.add('border-brand-green');
+        }
+
+        function toggleAccordion(element) {
+            const wasOpen = element.classList.contains('accordion-open');
+            document.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('accordion-open'));
+            if(!wasOpen) element.classList.add('accordion-open');
+        }
+
+        // Cart logic
+        function openCart() {
+            document.getElementById('cart-drawer').classList.add('open');
+            document.getElementById('drawer-overlay').classList.add('open');
+            renderCart();
+        }
+
+        function closeCart() {
+            document.getElementById('cart-drawer').classList.remove('open');
+            document.getElementById('drawer-overlay').classList.remove('open');
+        }
+
+        function addToCart() {
+            const itemPrice = currentType === 'sub' ? flavorData[currentFlavor].prices.sub : selectedOncePrice;
+            const desc = currentType === 'sub' ? "Monthly Subscription" : selectedOnceDesc;
+            
+            cart.push({
+                id: Date.now(),
+                flavor: currentFlavor,
+                type: currentType,
+                desc: desc,
+                price: itemPrice,
+                qty: 1,
+                img: flavorData[currentFlavor].mainImg
+            });
+            openCart();
+        }
+
+        function renderCart() {
+            const list = document.getElementById('cart-items');
+            const totalQty = cart.reduce((s, i) => s + i.qty, 0);
+            const totalAmt = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+            
+            document.getElementById('nav-cart-qty').innerText = totalQty;
+            document.getElementById('cart-qty-header').innerText = totalQty;
+            document.getElementById('cart-total').innerText = `$${totalAmt.toFixed(2)}`;
+
+            if(!cart.length) {
+                list.innerHTML = `<div class="h-full flex items-center justify-center text-stone-300">Bag is empty</div>`;
+                return;
+            }
+
+            list.innerHTML = cart.map((i, idx) => `
+                <div class="flex gap-4">
+                    <img src="${i.img}" class="w-16 h-16 bg-stone-50 rounded-xl object-contain p-1">
+                    <div class="flex-grow">
+                        <div class="flex justify-between font-bold text-sm">
+                            <span>${i.flavor} Greens</span>
+                            <span>$${i.price.toFixed(2)}</span>
+                        </div>
+                        <p class="text-[10px] text-stone-400 font-bold uppercase">${i.desc}</p>
+                        <button onclick="cart.splice(${idx},1); renderCart()" class="text-[10px] text-red-400 font-bold uppercase mt-1">Remove</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.onload = () => changeFlavor('Pineapple');
+    </script>
+</body>
+</html>
