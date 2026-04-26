@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Nourish Greens | Premium Superfood</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#60471A",
+                        "brand-green": "#648D6C",
+                        "brand-light-green": "#F4FAEB",
+                        "bg-cream": "#FFFDF9",
+                        "surface": "#F4EFE6",
+                    },
+                    fontFamily: {
+                        "sans": ["Manrope", "sans-serif"],
+                        "serif": ["Newsreader", "serif"]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .purchase-card-active { border-color: #648D6C !important; border-width: 2px !important; background-color: white !important; box-shadow: 0 10px 20px -5px rgb(100 141 108 / 0.15); }
+        .supply-card-active { border-color: #648D6C !important; background-color: #F4FAEB !important; border-width: 2px !important; }
+        .flavor-active { border-color: #648D6C !important; background-color: #F4FAEB !important; outline: 1.5px solid #648D6C; }
+        
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+        .accordion-open .accordion-content { max-height: 800px; }
+        .accordion-open .icon-rotate { transform: rotate(45deg); }
+        
+        .subset-container { 
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+            opacity: 0; 
+            max-height: 0; 
+            overflow: visible;
+            pointer-events: none; 
+            visibility: hidden;
+        }
+        .subset-active { 
+            opacity: 1; 
+            max-height: 500px; 
+            pointer-events: auto; 
+            visibility: visible;
+            margin-top: 1.5rem; 
+        }
+
+        #cart-drawer { transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        #cart-drawer.open { transform: translateX(0); }
+        #drawer-overlay { opacity: 0; transition: opacity 0.4s ease; pointer-events: none; }
+        #drawer-overlay.open { opacity: 1; pointer-events: auto; }
+
+        .star-fill { font-variation-settings: 'FILL' 1; color: #FFB800; }
+        .badge-pop { z-index: 20; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); pointer-events: none; }
+        
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-bg-cream antialiased font-sans text-stone-900">
+
+    <div id="drawer-overlay" onclick="closeCart()" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60]"></div>
+    <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white z-[70] shadow-2xl flex flex-col">
+        <div class="p-6 border-b border-stone-100 flex justify-between items-center bg-white">
+            <h2 class="text-xl font-extrabold tracking-tight">Your Bag (<span id="cart-qty-header">0</span>)</h2>
+            <button onclick="closeCart()" class="p-2 hover:bg-stone-100 rounded-full transition-colors"><span class="material-symbols-outlined">close</span></button>
+        </div>
+        <div id="cart-items" class="flex-grow overflow-y-auto p-6 space-y-4 bg-stone-50/30"></div>
+        <div id="cart-footer" class="p-6 border-t border-stone-100 bg-white space-y-4">
+            <div class="flex justify-between items-center font-bold text-lg">
+                <span class="text-stone-500 font-medium">Subtotal</span>
+                <span id="cart-total" class="text-stone-900 font-black">$0.00</span>
+            </div>
+            <button class="w-full bg-primary text-white py-4 rounded-xl font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/5">Go to Checkout</button>
+        </div>
+    </div>
+
+    <nav class="sticky top-0 z-50 bg-bg-cream/90 backdrop-blur-md border-b border-stone-100">
+        <div class="max-w-7xl mx-auto px-4 md:px-8 py-4 flex justify-between items-center">
+            <a class="text-xl md:text-2xl font-extrabold tracking-tighter flex items-center gap-1" href="#">
+                nourish <span class="material-symbols-outlined text-green-700 text-lg">energy_savings_leaf</span>
+            </a>
+            <button onclick="openCart()" class="bg-primary text-white px-5 py-2.5 rounded-full text-xs font-bold flex items-center gap-2 shadow-sm transition-all hover:scale-105 active:scale-95">
+                <span class="material-symbols-outlined text-lg">shopping_bag</span>
+                <span id="nav-cart-qty">0</span>
+            </button>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-12 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
+        <!-- Gallery -->
+        <div class="lg:col-span-7 flex flex-col-reverse md:flex-row gap-4 md:gap-6">
+            <div id="thumbnails-container" class="flex md:flex-col gap-3 md:w-24 overflow-x-auto md:overflow-visible pb-2 md:pb-0 scrollbar-hide"></div>
+            <div class="flex-grow bg-surface rounded-[2.5rem] p-6 md:p-12 flex items-center justify-center min-h-[380px] md:min-h-[600px] relative overflow-hidden group">
+                <img id="main-product-image" src="" class="w-full h-full object-contain transition-all duration-500 transform group-hover:scale-105">
+            </div>
+        </div>
+
+        <!-- Details -->
+        <div class="lg:col-span-5 flex flex-col gap-8">
+            <div class="space-y-4">
+                <h1 id="product-title" class="text-4xl md:text-6xl font-serif font-medium text-stone-900 leading-tight"></h1>
+                <div class="flex items-center gap-3">
+                    <div class="flex text-[#FFB800]"><span class="material-symbols-outlined star-fill">star</span><span class="material-symbols-outlined star-fill">star</span><span class="material-symbols-outlined star-fill">star</span><span class="material-symbols-outlined star-fill">star</span><span class="material-symbols-outlined star-fill">star</span></div>
+                    <span id="rating-number" class="font-bold text-lg"></span>
+                    <span id="review-count" class="text-stone-400 text-sm"></span>
+                </div>
+                <p id="product-description" class="text-stone-500 text-lg leading-relaxed"></p>
+            </div>
+
+            <!-- Flavor Selection -->
+            <div class="space-y-4">
+                <h3 class="text-[10px] font-black tracking-widest text-stone-400 uppercase">Select Flavor</h3>
+                <div class="grid grid-cols-3 gap-3">
+                    <button id="flavor-btn-Pineapple" onclick="changeFlavor('Pineapple')" class="flavor-btn border border-stone-200 rounded-2xl p-4 flex flex-col items-center gap-3 transition-all hover:border-brand-green">
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZCJKg2mYLM72b2s_993f60GiMNz1J_o2CO1yb4TQch3yvTbDYyt_6Xskckey-mgOhsvqWVToZhHAq7AViJdcNYK3DSi10bMh-Wo0zGjyWskUCNV21KifMDEbgRyNAKdmsjLAqMlw01mIjwpWbYiE9HZNo3aGf9DZpcMQKnyQfb82wHyUg7UBV9erm3joA5t8izipZuWplxogEIuVgQVjwX9aYxMQQ9XyU5JrYqM_0y7Tzhm_bnGUxVDPDfZJEo5VsUDK8gAxUVmk" class="w-12 h-12 rounded-full object-cover">
+                        <span class="text-xs font-bold">Pineapple</span>
+                    </button>
+                    <button id="flavor-btn-Strawberry" onclick="changeFlavor('Strawberry')" class="flavor-btn border border-stone-200 rounded-2xl p-4 flex flex-col items-center gap-3 transition-all hover:border-brand-green">
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAi2TYzfDH0re6srCrgOqErwQGJzNbxfXQezcQqpH4IZWoA6kXzN7WcN5t61UXaDAwmod5c3C6zd17-eSPOePMUueZKmPsUyqMbjwdb6Sl2h32-u6HvyiaGPTIhFqvpQDHPlWEwDx0e0I6NiVtDvvUzlnDwVukfuU6oFQ2BTE6-9iLcwomfBoXrOjk9O_24AyBUA2j-zNDCFDz_o9bH2yBVDJi9PKUMmRmj2w67E8atsEbes0ibQtja9OojqY4atMVA7ymTeTIEk-M" class="w-12 h-12 rounded-full object-cover">
+                        <span class="text-xs font-bold">Strawberry</span>
+                    </button>
+                    <button id="flavor-btn-Kiwi" onclick="changeFlavor('Kiwi')" class="flavor-btn border border-stone-200 rounded-2xl p-4 flex flex-col items-center gap-3 transition-all hover:border-brand-green">
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQ6q6PCMnUz6h4hDiJ2UDJx05LQHrwb2CimC-l2Sc3RweeQlMSmAJU3cxttAOwJZWw5Dd3BcyvRop5ncGSPq0vtunxu7HTjNpXwif8hMItfMDmW9LAmb6-DHPMukSS1kTxXCUPPFGiRsdmFybnzLowgMe-s0H_MtiU4oDhfi-ESxFboitvcAYCY9ngCbLzzFyAQuITUkm1W-cXPwW8z6KUY95nWh07Q6ATTk3OtuyKPxj6Wu9KZali7qxVvKZdAK_i1QMX_-FsyG4" class="w-12 h-12 rounded-full object-cover">
+                        <span class="text-xs font-bold">Kiwi</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Pricing Section -->
+            <div class="bg-white border border-stone-100 rounded-[2.5rem] p-6 shadow-sm space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- Sub Card -->
+                    <div id="card-sub" onclick="setPurchaseType('sub')" class="purchase-card-active relative bg-stone-50 border border-stone-200 rounded-3xl p-6 cursor-pointer transition-all hover:shadow-md">
+                        <div class="absolute -top-3.5 left-6 bg-brand-green text-white text-[9px] font-black uppercase px-3.5 py-2 rounded-full badge-pop">Most Popular</div>
+                        <span class="text-[10px] font-black text-brand-green uppercase tracking-widest">Subscription</span>
+                        <div id="sub-price-display" class="text-4xl font-black mt-2 text-stone-900"></div>
+                        <p id="sub-save-label" class="text-[10px] font-bold text-stone-400 mt-2 uppercase"></p>
+                    </div>
+
+                    <!-- One-Time Card -->
+                    <div id="card-once" onclick="setPurchaseType('once')" class="relative bg-stone-50 border border-stone-200 rounded-3xl p-6 cursor-pointer transition-all hover:shadow-md">
+                        <span class="text-[10px] font-black text-stone-400 uppercase tracking-widest">One-time</span>
+                        <div id="once-price-display" class="text-4xl font-black mt-2 text-stone-900"></div>
+                        <p id="once-supply-display" class="text-[10px] font-bold text-stone-400 mt-2 uppercase"></p>
+                    </div>
+                </div>
+
+                <!-- One-time Sub-Options -->
+                <div id="subset-ui" class="subset-container">
+                    <div id="one-time-grid" class="grid grid-cols-3 gap-3 pt-3">
+                        <!-- Rendered via JS -->
+                    </div>
+                </div>
+
+                <button onclick="addToCart()" class="w-full bg-primary text-white py-5 rounded-2xl font-bold text-lg hover:opacity-95 active:scale-95 transition-all shadow-xl shadow-primary/10 flex items-center justify-center gap-2">
+                    Add to Bag <span class="opacity-40 font-light">|</span> <span id="btn-price-preview"></span>
+                </button>
+            </div>
+
+            <!-- Tabs -->
+            <div class="divide-y divide-stone-100">
+                <div class="accordion-item" onclick="toggleAccordion(this)">
+                    <div class="py-6 flex justify-between items-center cursor-pointer group">
+                        <span class="font-bold text-stone-900 group-hover:text-brand-green transition-colors">Ingredients & Nutrition</span>
+                        <span class="material-symbols-outlined icon-rotate transition-transform">add</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div id="dynamic-ingredients" class="pb-6 text-sm text-stone-500 leading-relaxed"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const flavorData = {
+            "Pineapple": {
+                title: "Nourish Greens: Pineapple Punch",
+                rating: 4.8,
+                reviews: 221,
+                desc: "An island-inspired digestive powerhouse that eliminates bloat using raw pineapple bromelain.",
+                prices: { sub: 19.49, subSave: "SAVE 35% + FREE SHIPPING" },
+                options: [
+                    { label: "1 MONTH", price: 29.99, save: "", popular: false },
+                    { label: "2 MONTH", price: 51.99, save: "SAVE 15%", popular: true },
+                    { label: "3 MONTH", price: 69.99, save: "SAVE 25%", popular: false }
+                ],
+                gallery: [
+                    "https://lh3.googleusercontent.com/aida-public/AB6AXuBp_fUlXmq5OubjhnQtcOME0xXiuyik6kGyoStbfuDidK_isPliOFPhw_D1vEMhHbT2CFasfc9E9z8pVFs7IavLJxScnq_Y6JgUVLrocLu_8sYSyI3a6SZvbOuC232IkoIrE6OHBlYoX00ENCxyYX_-StciMbR1GMinEAe964mAb52cC4EP8rcKZsQpHZC_PlaTR24-VXJhhKbTcced5EhXxTHgSJznBmnGaMAKlolhXCMui1dU5MbtVxGdFtvOzMv4GzA9sl8QXRY",
+                    "https://lh3.googleusercontent.com/aida-public/AB6AXuDZCJKg2mYLM72b2s_993f60GiMNz1J_o2CO1yb4TQch3yvTbDYyt_6Xskckey-mgOhsvqWVToZhHAq7AViJdcNYK3DSi10bMh-Wo0zGjyWskUCNV21KifMDEbgRyNAKdmsjLAqMlw01mIjwpWbYiE9HZNo3aGf9DZpcMQKnyQfb82wHyUg7UBV9erm3joA5t8izipZuWplxogEIuVgQVjwX9aYxMQQ9XyU5JrYqM_0y7Tzhm_bnGUxVDPDfZJEo5VsUDK8gAxUVmk"
+                ],
+                ingredients: "Raw Pineapple Extract, Organic Spirulina, Chlorella, Wheatgrass."
+            },
+            "Strawberry": {
+                title: "Nourish Greens: Wild Strawberry",
+                rating: 4.9,
+                reviews: 184,
+                desc: "A nutrient-dense blend designed to support glowing skin and daily metabolic vitality.",
+                prices: { sub: 21.49, subSave: "SAVE 40% + FREE GIFT" },
+                options: [
+                    { label: "1 MONTH", price: 34.99, save: "", popular: false },
+                    { label: "2 MONTH", price: 58.99, save: "SAVE 10%", popular: false },
+                    { label: "3 MONTH", price: 79.99, save: "SAVE 30%", popular: true }
+                ],
+                gallery: [
+                    "https://lh3.googleusercontent.com/aida-public/AB6AXuAi2TYzfDH0re6srCrgOqErwQGJzNbxfXQezcQqpH4IZWoA6kXzN7WcN5t61UXaDAwmod5c3C6zd17-eSPOePMUueZKmPsUyqMbjwdb6Sl2h32-u6HvyiaGPTIhFqvpQDHPlWEwDx0e0I6NiVtDvvUzlnDwVukfuU6oFQ2BTE6-9iLcwomfBoXrOjk9O_24AyBUA2j-zNDCFDz_o9bH2yBVDJi9PKUMmRmj2w67E8atsEbes0ibQtja9OojqY4atMVA7ymTeTIEk-M"
+                ],
+                ingredients: "Freeze-dried Strawberry, Beetroot, Barley Grass."
+            },
+            "Kiwi": {
+                title: "Nourish Greens: Golden Kiwi",
+                rating: 4.7,
+                reviews: 142,
+                desc: "A zesty immune-boosting formula featuring rare golden kiwi polyphenols.",
+                prices: { sub: 18.99, subSave: "SAVE 30% + FREE SHAKER" },
+                options: [
+                    { label: "1 MONTH", price: 27.99, save: "", popular: true },
+                    { label: "2 MONTH", price: 49.99, save: "SAVE 12%", popular: false },
+                    { label: "3 MONTH", price: 64.99, save: "SAVE 20%", popular: false }
+                ],
+                gallery: [
+                    "https://lh3.googleusercontent.com/aida-public/AB6AXuBQ6q6PCMnUz6h4hDiJ2UDJx05LQHrwb2CimC-l2Sc3RweeQlMSmAJU3cxttAOwJZWw5Dd3BcyvRop5ncGSPq0vtunxu7HTjNpXwif8hMItfMDmW9LAmb6-DHPMukSS1kTxXCUPPFGiRsdmFybnzLowgMe-s0H_MtiU4oDhfi-ESxFboitvcAYCY9ngCbLzzFyAQuITUkm1W-cXPwW8z6KUY95nWh07Q6ATTk3OtuyKPxj6Wu9KZali7qxVvKZdAK_i1QMX_-FsyG4"
+                ],
+                ingredients: "Golden Kiwi Essence, Kale, Spinach, Ceremonial Matcha."
+            }
+        };
+
+        let cart = [];
+        let currentFlavor = "Pineapple";
+        let currentType = "sub"; 
+        let currentOnceIndex = 1;
+
+        function changeFlavor(name) {
+            currentFlavor = name;
+            const data = flavorData[name];
+            
+            // Sync flavor highlight
+            document.querySelectorAll('.flavor-btn').forEach(b => b.classList.remove('flavor-active'));
+            document.getElementById(`flavor-btn-${name}`).classList.add('flavor-active');
+
+            // Find current flavor's "Popular" index for the one-time default
+            currentOnceIndex = data.options.findIndex(o => o.popular);
+            if (currentOnceIndex === -1) currentOnceIndex = 1;
+
+            syncUI();
+        }
+
+        function syncUI() {
+            const data = flavorData[currentFlavor];
+            
+            // Header Info
+            document.getElementById('product-title').innerText = data.title;
+            document.getElementById('rating-number').innerText = data.rating;
+            document.getElementById('review-count').innerText = `(${data.reviews} Reviews)`;
+            document.getElementById('product-description').innerText = data.desc;
+            document.getElementById('dynamic-ingredients').innerText = data.ingredients;
+
+            // Subscription Section
+            document.getElementById('sub-price-display').innerText = `$${data.prices.sub.toFixed(2)}`;
+            document.getElementById('sub-save-label').innerText = data.prices.subSave;
+
+            // One-Time Section Summary (Top Card)
+            const onceOpt = data.options[currentOnceIndex];
+            document.getElementById('once-price-display').innerText = `$${onceOpt.price.toFixed(2)}`;
+            document.getElementById('once-supply-display').innerText = `${onceOpt.label} SUPPLY`;
+
+            // Render Dynamic One-Time Grid
+            const grid = document.getElementById('one-time-grid');
+            grid.innerHTML = data.options.map((opt, i) => `
+                <button onclick="updateOnceOption(${i}, this)" 
+                        class="supply-btn relative flex flex-col items-center gap-1 p-4 rounded-2xl transition-all border 
+                        ${i === currentOnceIndex ? 'supply-card-active border-2 border-brand-green' : 'bg-white border-stone-200'}">
+                    
+                    ${opt.popular ? `
+                        <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-brand-green text-white text-[7px] font-black uppercase px-2.5 py-1.5 rounded-full whitespace-nowrap badge-pop">
+                            Most Popular
+                        </div>
+                    ` : ''}
+                    
+                    <span class="text-[9px] font-bold text-stone-500 uppercase">${opt.label.split(' ')[0]}-mo</span>
+                    <span class="text-base font-black text-stone-900">$${opt.price.toFixed(2)}</span>
+                    <span class="text-[8px] font-bold text-brand-green mt-0.5">${opt.save}</span>
+                </button>
+            `).join('');
+
+            // Gallery
+            const main = document.getElementById('main-product-image');
+            main.src = data.gallery[0];
+            const thumbs = document.getElementById('thumbnails-container');
+            thumbs.innerHTML = data.gallery.map((src, i) => `
+                <div class="w-16 h-16 md:w-full aspect-square bg-white rounded-2xl overflow-hidden border-2 transition-all ${i === 0 ? 'border-brand-green ring-4 ring-brand-green/5' : 'border-transparent opacity-60'} cursor-pointer" onclick="updateMainImg('${src}', this)">
+                    <img src="${src}" class="w-full h-full object-contain p-1">
+                </div>
+            `).join('');
+
+            updateAddButton();
+        }
+
+        function setPurchaseType(type) {
+            currentType = type;
+            document.getElementById('card-sub').classList.toggle('purchase-card-active', type === 'sub');
+            document.getElementById('card-once').classList.toggle('purchase-card-active', type === 'once');
+            document.getElementById('subset-ui').classList.toggle('subset-active', type === 'once');
+            updateAddButton();
+        }
+
+        function updateOnceOption(idx, btn) {
+            currentOnceIndex = idx;
+            const data = flavorData[currentFlavor].options[idx];
+            document.getElementById('once-price-display').innerText = `$${data.price.toFixed(2)}`;
+            document.getElementById('once-supply-display').innerText = `${data.label} SUPPLY`;
+            
+            document.querySelectorAll('.supply-btn').forEach(b => b.classList.remove('supply-card-active', 'border-2', 'border-brand-green'));
+            btn.classList.add('supply-card-active', 'border-2', 'border-brand-green');
+            
+            setPurchaseType('once');
+        }
+
+        function updateAddButton() {
+            const price = currentType === 'sub' ? flavorData[currentFlavor].prices.sub : flavorData[currentFlavor].prices.once || flavorData[currentFlavor].options[currentOnceIndex].price;
+            document.getElementById('btn-price-preview').innerText = `$${price.toFixed(2)}`;
+        }
+
+        function updateMainImg(src, thumb) {
+            document.getElementById('main-product-image').src = src;
+            document.querySelectorAll('#thumbnails-container > div').forEach(d => d.classList.remove('border-brand-green', 'ring-4', 'ring-brand-green/5', 'opacity-100'));
+            thumb.classList.add('border-brand-green', 'ring-4', 'ring-brand-green/5');
+            thumb.classList.remove('opacity-60');
+        }
+
+        function toggleAccordion(element) {
+            element.classList.toggle('accordion-open');
+        }
+
+        // --- Cart Logic ---
+
+        function openCart() {
+            document.getElementById('cart-drawer').classList.add('open');
+            document.getElementById('drawer-overlay').classList.add('open');
+            renderCart();
+        }
+
+        function closeCart() {
+            document.getElementById('cart-drawer').classList.remove('open');
+            document.getElementById('drawer-overlay').classList.remove('open');
+        }
+
+        function addToCart() {
+            const data = flavorData[currentFlavor];
+            const price = currentType === 'sub' ? data.prices.sub : data.options[currentOnceIndex].price;
+            const planName = currentType === 'sub' ? "Subscription" : `${data.options[currentOnceIndex].label} SUPPLY`;
+            const key = `${currentFlavor}-${planName}`;
+
+            const existing = cart.find(i => i.key === key);
+            if (existing) {
+                existing.qty++;
+            } else {
+                cart.push({ key, flavor: currentFlavor, planName, price, qty: 1, img: data.gallery[0] });
+            }
+            openCart();
+        }
+
+        function updateQty(key, delta) {
+            const item = cart.find(i => i.key === key);
+            if (!item) return;
+            item.qty += delta;
+            if (item.qty <= 0) cart = cart.filter(i => i.key !== key);
+            renderCart();
+        }
+
+        function renderCart() {
+            const list = document.getElementById('cart-items');
+            const totalQty = cart.reduce((s, i) => s + i.qty, 0);
+            const totalAmt = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+            
+            document.getElementById('nav-cart-qty').innerText = totalQty;
+            document.getElementById('cart-qty-header').innerText = totalQty;
+            document.getElementById('cart-total').innerText = `$${totalAmt.toFixed(2)}`;
+
+            list.innerHTML = cart.length ? cart.map(i => `
+                <div class="flex gap-4 p-4 bg-white rounded-2xl shadow-sm border border-stone-100">
+                    <img src="${i.img}" class="w-16 h-16 bg-stone-50 rounded-xl object-contain p-2 border border-stone-50">
+                    <div class="flex-grow flex flex-col justify-between">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-extrabold text-stone-900 text-sm">${i.flavor}</h4>
+                                <p class="text-[10px] text-brand-green font-bold uppercase tracking-wider">${i.planName}</p>
+                            </div>
+                            <span class="font-black text-stone-900 text-sm">$${(i.price * i.qty).toFixed(2)}</span>
+                        </div>
+                        <div class="flex items-center justify-between mt-2">
+                            <div class="flex items-center bg-stone-100 rounded-lg p-0.5">
+                                <button onclick="updateQty('${i.key}', -1)" class="w-6 h-6 flex items-center justify-center rounded-md hover:bg-white text-stone-500"><span class="material-symbols-outlined text-sm">remove</span></button>
+                                <span class="w-7 text-center text-xs font-black">${i.qty}</span>
+                                <button onclick="updateQty('${i.key}', 1)" class="w-6 h-6 flex items-center justify-center rounded-md hover:bg-white text-stone-500"><span class="material-symbols-outlined text-sm">add</span></button>
+                            </div>
+                            <button onclick="updateQty('${i.key}', -${i.qty})" class="text-[10px] font-black text-stone-300 uppercase hover:text-red-500">Remove</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('') : `<div class="h-64 flex flex-col items-center justify-center text-stone-300 italic">Bag is empty</div>`;
+        }
+
+        window.onload = () => changeFlavor('Pineapple');
+    </script>
+</body>
+</html>
