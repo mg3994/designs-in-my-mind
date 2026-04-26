@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Nourish Greens - Product Detail Page</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#60471A",
+                        "brand-green": "#648D6C",
+                        "brand-light-green": "#F4FAEB",
+                        "secondary": "#58674E",
+                        "on-background": "#1b1c1c",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#414846",
+                        "outline-variant": "#c1c8c4",
+                        "bg-body": "#FFFDF9"
+                    },
+                    "fontFamily": {
+                        "sans": ["Manrope"],
+                        "serif": ["Newsreader"]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #FFFDF9; color: #1b1c1c; font-family: 'Manrope', sans-serif; }
+        h1, h2, h3, .font-serif { font-family: 'Newsreader', serif; }
+        
+        .purchase-card-active {
+            border-color: #648D6C !important;
+            border-width: 2px !important;
+        }
+        
+        .supply-card-active {
+            border-color: #648D6C !important;
+            background-color: #F4FAEB !important;
+            border-width: 2px !important;
+        }
+
+        .flavor-active {
+            border-color: #648D6C !important;
+            background-color: #F4FAEB !important;
+            outline: 1.5px solid #648D6C;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+    <!-- TopAppBar -->
+    <nav class="bg-transparent flex justify-between items-center px-6 py-6 max-w-7xl mx-auto w-full z-50 hidden md:flex">
+        <div class="flex items-center gap-12 w-full">
+            <a class="text-3xl font-bold text-black tracking-tight flex items-center gap-1" href="#">
+                nourish <span class="material-symbols-outlined text-green-700 text-sm">energy_savings_leaf</span>
+            </a>
+            <div class="flex gap-8 mx-auto">
+                <a class="text-stone-600 hover:text-black transition-colors text-sm font-medium" href="#">Shop All</a>
+                <a class="text-stone-600 hover:text-black transition-colors text-sm font-medium" href="#">Bundles</a>
+                <a class="text-stone-600 hover:text-black transition-colors text-sm font-medium" href="#">Science</a>
+                <a class="text-stone-600 hover:text-black transition-colors text-sm font-medium" href="#">About Us</a>
+            </div>
+            <div class="flex gap-6 items-center">
+                <a class="text-stone-600 hover:text-black transition-colors text-sm font-medium" href="#">Login</a>
+                <a class="text-stone-600 hover:text-black transition-colors text-sm font-medium flex items-center gap-1" href="#">Shopping Bag</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 grid grid-cols-1 lg:grid-cols-12 gap-12 w-full">
+        <!-- Image Section -->
+        <div class="lg:col-span-7 flex gap-4">
+            <!-- Thumbnails -->
+            <div class="flex flex-col gap-4 w-24 flex-shrink-0">
+                <div class="w-full aspect-square bg-[#F4EFE6] rounded-xl overflow-hidden border-2 border-stone-200 cursor-pointer">
+                    <img alt="Thumbnail 1" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/ADBb0uiU2mVqQSGAj85nNz4NWOMDx6sq6zhpzzbOopiWHkemX-jXwMv9Ok7D2ix2g5PhJlhtPqpiLBWIDaFnt-jmkkXwQgMRlipbFcTjepWf_WgQTOFck9xqIo2_Rm3cV5mMy2Gtrkp4zgl7D9ZK1-jpGBLVX9g6lQhydsMO9tyT6-syphCHTQha70iXYD5fLcMGQkp5NLg0Jyq-sxpwbnsGraJxt-xs4RL8GlFpgWzbLJoKXd9opNqMYyUZfg"/>
+                </div>
+                <div class="w-full aspect-square bg-[#F4EFE6] rounded-xl overflow-hidden cursor-pointer opacity-60 hover:opacity-100 transition-opacity">
+                    <img alt="Thumbnail 2" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/ADBb0uhA8VFMX47pwCU0E3rSmKXhvz1kvSh0DOYquWykNE4tgjeLZMHKelMZgUMh-Fbf2ozI8gdJOXqgumGXRs4xx__rzoUegs_cCfZXnJniw4rw1hSA08ncwfEn8aR-5AvhJWG5YKswIS2ZfrMcyMG9S8SzbwmWbBu59hJeucyGfvPPY5FzBd4wxd7trAMfU92So3L9_AKYkWn4QLhivt-eMvJX1TjwfCD1afxAfV5rT76J0PcsL5_tx0T3EGQ"/>
+                </div>
+                <div class="w-full aspect-square bg-[#F4EFE6] rounded-xl overflow-hidden cursor-pointer opacity-60 hover:opacity-100 transition-opacity">
+                    <img alt="Thumbnail 3" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/ADBb0uh2FqIA4m01opoH7VFjpXDHy7KY5Iy7HuBDzeKKmTLad7O1BFTUZDY_k-r9GgS24kTn564kHgo1SfI_xn5qb2R5jT4AxGFBEcHZHjYaGL8okEOMcYH1VVdg3XW34cFTupSBinJ2dlrzEuln6OERKxZCpCDNja_FT6KBpYOGxR3ORjg6-O1LHNGhSJR1xK5_L6VRJI8DWjzKNj6AMBfCeY4eoUtEjWw14XAqXJOJ5uu4tFWLXSkJqFjT9qs"/>
+                </div>
+            </div>
+            <!-- Main Image -->
+            <div class="flex-grow bg-[#F4EFE6] rounded-[2.5rem] overflow-hidden flex items-center justify-center p-8 relative max-h-[700px]">
+                <img alt="Nourish Greens Product" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBp_fUlXmq5OubjhnQtcOME0xXiuyik6kGyoStbfuDidK_isPliOFPhw_D1vEMhHbT2CFasfc9E9z8pVFs7IavLJxScnq_Y6JgUVLrocLu_8sYSyI3a6SZvbOuC232IkoIrE6OHBlYoX00ENCxyYX_-StciMbR1GMinEAe964mAb52cC4EP8rcKZsQpHZC_PlaTR24-VXJhhKbTcced5EhXxTHgSJznBmnGaMAKlolhXCMui1dU5MbtVxGdFtvOzMv4GzA9sl8QXRY"/>
+            </div>
+        </div>
+
+        <!-- Details Section -->
+        <div class="lg:col-span-5 flex flex-col gap-6">
+            <!-- Badges & Title -->
+            <div class="flex flex-col gap-3">
+                <div class="inline-flex items-center gap-1 self-start bg-[#FDF6E9] text-[#8E6935] text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest">
+                    <span class="material-symbols-outlined text-xs fill-1" style="font-variation-settings: 'FILL' 1;">star</span> BEST SELLER
+                </div>
+                <h1 class="font-serif text-5xl font-medium text-black">Nourish Greens</h1>
+                
+                <!-- Social Proof -->
+                <div class="flex items-center gap-3 text-stone-600 text-sm">
+                    <div class="flex items-center gap-1">
+                        <div class="flex text-[#FFB800]">
+                            <span class="material-symbols-outlined text-sm fill-1" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-sm fill-1" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-sm fill-1" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-sm fill-1" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-sm fill-1" style="font-variation-settings: 'FILL' 1;">star</span>
+                        </div>
+                        <span class="font-bold text-black ml-1">4.9</span> <span>(221 Reviews)</span>
+                    </div>
+                    <div class="w-px h-4 bg-stone-300"></div>
+                    <div class="flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[#FF5A1F] text-sm fill-1" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+                        <span><strong class="text-black">500+</strong> sold this week</span>
+                    </div>
+                </div>
+                <p class="text-stone-500 mt-2 leading-relaxed">
+                    A refreshing daily greens blend that combines nutrient-dense greens, plant extracts, and functional ingredients into one simple scoop.
+                </p>
+            </div>
+
+            <!-- Flavor Selection -->
+            <div class="flex flex-col gap-3 mt-2">
+                <span class="text-[10px] font-black text-stone-400 uppercase tracking-widest">CHOOSE YOUR FLAVOR:</span>
+                <div class="flex gap-3">
+                    <button class="flavor-btn flavor-active flex items-center gap-3 px-4 py-3 rounded-xl border border-stone-200 bg-white w-1/3 transition-all" onclick="selectFlavor(this)">
+                        <img alt="Pineapple" class="w-8 h-8 object-cover rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZCJKg2mYLM72b2s_993f60GiMNz1J_o2CO1yb4TQch3yvTbDYyt_6Xskckey-mgOhsvqWVToZhHAq7AViJdcNYK3DSi10bMh-Wo0zGjyWskUCNV21KifMDEbgRyNAKdmsjLAqMlw01mIjwpWbYiE9HZNo3aGf9DZpcMQKnyQfb82wHyUg7UBV9erm3joA5t8izipZuWplxogEIuVgQVjwX9aYxMQQ9XyU5JrYqM_0y7Tzhm_bnGUxVDPDfZJEo5VsUDK8gAxUVmk"/>
+                        <span class="text-sm font-bold">Pineapple</span>
+                    </button>
+                    <button class="flavor-btn flex items-center gap-3 px-4 py-3 rounded-xl border border-stone-200 bg-white w-1/3 transition-all" onclick="selectFlavor(this)">
+                        <img alt="Strawberry" class="w-8 h-8 object-cover rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAi2TYzfDH0re6srCrgOqErwQGJzNbxfXQezcQqpH4IZWoA6kXzN7WcN5t61UXaDAwmod5c3C6zd17-eSPOePMUueZKmPsUyqMbjwdb6Sl2h32-u6HvyiaGPTIhFqvpQDHPlWEwDx0e0I6NiVtDvvUzlnDwVukfuU6oFQ2BTE6-9iLcwomfBoXrOjk9O_24AyBUA2j-zNDCFDz_o9bH2yBVDJi9PKUMmRmj2w67E8atsEbes0ibQtja9OojqY4atMVA7ymTeTIEk-M"/>
+                        <span class="text-sm font-bold">Strawberry</span>
+                    </button>
+                    <button class="flavor-btn flex items-center gap-3 px-4 py-3 rounded-xl border border-stone-200 bg-white w-1/3 transition-all" onclick="selectFlavor(this)">
+                        <img alt="Kiwi" class="w-8 h-8 object-cover rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQ6q6PCMnUz6h4hDiJ2UDJx05LQHrwb2CimC-l2Sc3RweeQlMSmAJU3cxttAOwJZWw5Dd3BcyvRop5ncGSPq0vtunxu7HTjNpXwif8hMItfMDmW9LAmb6-DHPMukSS1kTxXCUPPFGiRsdmFybnzLowgMe-s0H_MtiU4oDhfi-ESxFboitvcAYCY9ngCbLzzFyAQuITUkm1W-cXPwW8z6KUY95nWh07Q6ATTk3OtuyKPxj6Wu9KZali7qxVvKZdAK_i1QMX_-FsyG4"/>
+                        <span class="text-sm font-bold">Kiwi</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Purchase Container (MATCHING ONETIME.PNG) -->
+            <div class="bg-[#FBF8F3] rounded-[2rem] p-6 mt-4 border border-stone-200 space-y-4">
+                <!-- Top Two Selection Cards -->
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- Subscribe Option -->
+                    <div id="card-subscribe" onclick="togglePurchase('subscribe')" class="purchase-card-active relative bg-white border border-stone-200 rounded-2xl p-5 cursor-pointer transition-all">
+                        <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#648D6C] text-white text-[9px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest whitespace-nowrap shadow-sm">Most Popular</div>
+                        <span class="text-[10px] font-black text-[#648D6C] uppercase tracking-widest">Subscribe</span>
+                        <div class="text-3xl font-black text-stone-900 mt-1">$19.49</div>
+                        <div class="text-[10px] text-stone-400 font-medium mt-1">/month • no commitment</div>
+                    </div>
+
+                    <!-- One-Time Option -->
+                    <div id="card-onetime" onclick="togglePurchase('onetime')" class="relative bg-white border border-stone-200 rounded-2xl p-5 cursor-pointer transition-all hover:border-stone-400">
+                        <span class="text-[10px] font-black text-stone-400 uppercase tracking-widest">One-time purchase</span>
+                        <div id="display-price-onetime" class="text-3xl font-black text-stone-900 mt-1">$51.99</div>
+                        <div id="display-label-onetime" class="text-[10px] text-stone-400 font-medium mt-1">2 month supply</div>
+                    </div>
+                </div>
+
+                <!-- Bottom Three Supply Options -->
+                <div id="supply-grid" class="grid grid-cols-3 gap-3 pt-2">
+                    <!-- 1-Month -->
+                    <div onclick="selectSupply(29.99, '1 month supply', this)" class="supply-card flex flex-col items-center justify-center p-4 rounded-2xl border border-stone-200 bg-white cursor-pointer transition-all hover:border-stone-400">
+                        <span class="text-[10px] font-bold text-stone-600 mb-1 text-center">1-month supply</span>
+                        <span class="text-lg font-black text-stone-900">$29.99</span>
+                    </div>
+                    <!-- 2-Month -->
+                    <div onclick="selectSupply(51.99, '2 month supply', this)" class="supply-card supply-card-active flex flex-col items-center justify-center p-4 rounded-2xl border border-stone-200 bg-white cursor-pointer transition-all relative">
+                        <span class="text-[10px] font-bold text-stone-600 mb-1 text-center">2-month supply</span>
+                        <span class="text-lg font-black text-stone-900">$51.99</span>
+                        <div class="mt-2 bg-[#F4FAEB] text-[#648D6C] text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter">Save 10%</div>
+                    </div>
+                    <!-- 3-Month -->
+                    <div onclick="selectSupply(69.99, '3 month supply', this)" class="supply-card flex flex-col items-center justify-center p-4 rounded-2xl border border-stone-200 bg-white cursor-pointer transition-all">
+                        <span class="text-[10px] font-bold text-stone-600 mb-1 text-center">3-month supply</span>
+                        <span class="text-lg font-black text-stone-900">$69.99</span>
+                        <div class="mt-2 bg-[#F4FAEB] text-[#648D6C] text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter">Save 20%</div>
+                    </div>
+                </div>
+
+                <!-- Features list -->
+                <ul class="flex flex-col gap-3 pt-4">
+                    <li class="flex items-center gap-3 text-[13px] font-semibold text-stone-800">
+                        <span class="material-symbols-outlined text-[#648D6C] text-lg fill-1" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                        Save 15% every month + free shipping
+                    </li>
+                    <li class="flex items-center gap-3 text-[13px] font-semibold text-stone-800">
+                        <span class="material-symbols-outlined text-[#648D6C] text-lg fill-1" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                        Cancel anytime - no fees
+                    </li>
+                    <li class="flex items-center gap-3 text-[13px] font-semibold text-stone-800">
+                        <span class="material-symbols-outlined text-[#648D6C] text-lg fill-1" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                        Priority dispatch - never run out
+                    </li>
+                </ul>
+
+                <!-- CTA -->
+                <button class="w-full bg-primary text-white font-bold py-5 px-6 rounded-2xl text-center flex items-center justify-center gap-3 mt-4 hover:opacity-95 active:scale-[0.98] transition-all text-lg shadow-sm">
+                    <span class="material-symbols-outlined">shopping_cart</span>
+                    Add to cart - Start my journey
+                </button>
+            </div>
+
+            <!-- Trust Icons -->
+            <div class="grid grid-cols-3 gap-4 mt-8">
+                <div class="flex flex-col items-center gap-2 text-center">
+                    <div class="w-12 h-12 rounded-full bg-[#FCF6E9] flex items-center justify-center text-[#B88645]">
+                        <span class="material-symbols-outlined">energy_savings_leaf</span>
+                    </div>
+                    <span class="text-[11px] font-black text-stone-900 uppercase tracking-widest">100% vegan</span>
+                    <span class="text-[10px] text-stone-400 font-medium">No fillers or binders</span>
+                </div>
+                <div class="flex flex-col items-center gap-2 text-center">
+                    <div class="w-12 h-12 rounded-full bg-[#FCF6E9] flex items-center justify-center text-[#B88645]">
+                        <span class="material-symbols-outlined">payments</span>
+                    </div>
+                    <span class="text-[11px] font-black text-stone-900 uppercase tracking-widest">60-day guarantee</span>
+                    <span class="text-[10px] text-stone-400 font-medium">Love it or full refund</span>
+                </div>
+                <div class="flex flex-col items-center gap-2 text-center">
+                    <div class="w-12 h-12 rounded-full bg-[#FCF6E9] flex items-center justify-center text-[#B88645]">
+                        <span class="material-symbols-outlined">verified</span>
+                    </div>
+                    <span class="text-[11px] font-black text-stone-900 uppercase tracking-widest">3rd-party tested</span>
+                    <span class="text-[10px] text-stone-400 font-medium">for heavy metals</span>
+                </div>
+            </div>
+
+            <!-- Accordions -->
+            <div class="mt-8 border-t border-stone-200">
+                <div class="flex justify-between items-center py-5 border-b border-stone-100 cursor-pointer group">
+                    <span class="font-bold text-stone-900">Serving Information</span>
+                    <span class="material-symbols-outlined text-stone-400 group-hover:text-black transition-colors">add</span>
+                </div>
+                <div class="flex justify-between items-center py-5 border-b border-stone-100 cursor-pointer group">
+                    <span class="font-bold text-stone-900">Ingredients</span>
+                    <span class="material-symbols-outlined text-stone-400 group-hover:text-black transition-colors">add</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function togglePurchase(type) {
+            const sub = document.getElementById('card-subscribe');
+            const once = document.getElementById('card-onetime');
+            const grid = document.getElementById('supply-grid');
+
+            if (type === 'subscribe') {
+                sub.classList.add('purchase-card-active');
+                once.classList.remove('purchase-card-active');
+                grid.style.opacity = '0.5';
+                grid.style.pointerEvents = 'none';
+            } else {
+                once.classList.add('purchase-card-active');
+                sub.classList.remove('purchase-card-active');
+                grid.style.opacity = '1';
+                grid.style.pointerEvents = 'auto';
+            }
+        }
+
+        function selectSupply(price, label, element) {
+            // Update display in the main One-time card
+            document.getElementById('display-price-onetime').innerText = `$${price}`;
+            document.getElementById('display-label-onetime').innerText = label;
+
+            // Manage active classes
+            document.querySelectorAll('.supply-card').forEach(card => {
+                card.classList.remove('supply-card-active');
+            });
+            element.classList.add('supply-card-active');
+            
+            // Auto switch to One-time mode
+            togglePurchase('onetime');
+        }
+
+        function selectFlavor(btn) {
+            document.querySelectorAll('.flavor-btn').forEach(b => b.classList.remove('flavor-active'));
+            btn.classList.add('flavor-active');
+        }
+
+        // Default state: Subscribe selected
+        window.onload = () => {
+            document.getElementById('supply-grid').style.opacity = '0.5';
+            document.getElementById('supply-grid').style.pointerEvents = 'none';
+        }
+    </script>
+</body>
+</html>
